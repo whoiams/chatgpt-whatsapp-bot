@@ -1,19 +1,17 @@
-name: Run Bot
-
+name: Build My App
 on: workflow_dispatch
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [19.x]
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Build the app
+        run: ./gradlew build
+      - name: Upload
+        uses: actions/upload-artifact@v2
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm i
-      - run: node index
+          name: Build Artifacts
+          path: app/build/outputs/
